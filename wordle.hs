@@ -209,9 +209,12 @@ readDictionary = readFile dictionaryFilename >>= (return . lines)
 
 wordle :: IO ()
 wordle = do
+        oldbuff <- hGetBuffering stdin
+        hSetBuffering stdin NoBuffering
         dictionary <- readDictionary
         word <- selectWord dictionary
         wordleLoop (wordleNewGame word dictionary)
+        hSetBuffering stdin oldbuff
 
 main :: IO ()
 main = wordle
